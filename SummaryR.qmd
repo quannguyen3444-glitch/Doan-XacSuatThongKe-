@@ -217,13 +217,12 @@ TukeyHSD(anova_model)
 library(car)
 options(width = 90)
 
-# 1. Chia tập dữ liệu Train (80%) - Test (20%)
 set.seed(123)
 idx <- sample(1:nrow(df_clean), 0.8 * nrow(df_clean))
 train_data <- df_clean[idx, ]
 test_data <- df_clean[-idx, ]
 
-# 2. Khớp mô hình MLR đầy đủ trên tập Train
+
 mlr_model <- lm(OpRating ~ ADT + Length + MaxSpan + Width + YearBuilt, data = train_data)
 summary(mlr_model)
 ```
@@ -270,16 +269,14 @@ cat("Chỉ số RMSE trên tập Test:", rmse_value)
 #| warning: false
 options(width = 90)
 
-# 1. Phân chia dữ liệu Train (80%) và Test (20%)
+
 set.seed(123)
 train_idx <- sample(1:nrow(df_clean), 0.8 * nrow(df_clean))
 train_data <- df_clean[train_idx, ]
 test_data <- df_clean[-train_idx, ]
 
-# 2. Xây dựng mô hình Hồi quy Đa thức (Bậc 2 cho MaxSpan và Length)
 poly_model <- lm(OpRating ~ poly(MaxSpan, 2) + poly(Length, 2) + ADT + Width + YearBuilt, data = train_data)
 
-# 3. Xuất bảng tóm tắt kết quả hệ số và Adjusted R-squared
 summary(poly_model)
 ```
 :::
@@ -291,7 +288,7 @@ summary(poly_model)
 #| warning: false
 options(width = 90)
 
-# 4. Dự báo trên tập Test và tính chỉ số RMSE của mô hình Đa thức
+
 preds_poly <- predict(poly_model, newdata = test_data)
 rmse_poly <- sqrt(mean((test_data$OpRating - preds_poly)^2))
 cat("Chỉ số RMSE của mô hình Hồi quy đa thức trên tập Test:", rmse_poly, "\n")
@@ -306,7 +303,7 @@ cat("Chỉ số RMSE của mô hình Hồi quy đa thức trên tập Test:", rm
 #| warning: false
 options(width = 90)
 
-# 5. So sánh với mô hình MLR tuyến tính gốc trên tập Test
+
 mlr_base <- lm(OpRating ~ MaxSpan + Length + ADT + Width + YearBuilt, data = train_data)
 preds_mlr <- predict(mlr_base, newdata = test_data)
 rmse_mlr <- sqrt(mean((test_data$OpRating - preds_mlr)^2))
